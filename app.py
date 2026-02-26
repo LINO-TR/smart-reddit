@@ -72,13 +72,16 @@ if st.session_state.analise:
     # 2. Grid de Dados (Sem chaves { }!)
     col1, col2, col3 = st.columns(3)
 
-    with col1:
+        with col1:
         st.markdown('<div class="metric-card">', unsafe_allow_html=True)
         st.markdown("**🇪🇺 EURO (COT)**")
+        # Tradução simples na tela
         sig = st.session_state.dados["EUR"]["signal"].upper()
-        st.write(f"Sinal: **{sig}**")
+        sig_pt = "COMPRA" if "BUY" in sig else "VENDA" if "SELL" in sig else "NEUTRO"
+        st.write(f"Sinal: **{sig_pt}**")
         st.write(f"Força: `{st.session_state.dados['EUR']['strength']}/3`")
         st.markdown('</div>', unsafe_allow_html=True)
+
 
     with col2:
         st.markdown('<div class="metric-card" style="border-left-color: #28a745;">', unsafe_allow_html=True)
