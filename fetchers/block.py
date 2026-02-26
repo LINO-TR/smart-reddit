@@ -1,7 +1,6 @@
 import random
 
 def get():
-    # Simulando ordens de bloco da CME
-    direcao = random.choice(["buy", "sell", "none"])
-    return {"block": direcao, "intensity": "strong"}
-
+    # Traduzindo as ordens de bloco
+    direcao = random.choice(["COMPRA", "VENDA", "NENHUMA"])
+    return {"block": direcao, "intensity": "FORTE"}
