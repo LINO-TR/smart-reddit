@@ -2,15 +2,18 @@ import yfinance as ticker
 
 def get():
     try:
-        data = ticker.download("EURUSD=X", period="2d", interval="15m")
-        # Compara preço atual com o anterior
-        preco_atual = data['Close'].iloc[-1]
-        preco_anterior = data['Close'].iloc[-2]
+        data = ticker.download("EURUSD=X", period="2d", interval="1h")
+        if len(data) < 4: return {"sentiment": "NEUTRO", "volume": "BAIXO"}
         
-        if preco_atual > preco_anterior:
+        atual = data['Close'].iloc[-1]
+        referencia = data['Close'].iloc[-4] # 4 horas atrás
+        
+        if atual > referencia:
             return {"sentiment": "ALTA", "volume": "ALTO"}
+        elif atual < referencia:
+            return {"sentiment": "BAIXA", "volume": "ALTO"}
         else:
-            return {"sentiment": "BAIXA", "volume": "NORMAL"}
+            return {"sentiment": "NEUTRO", "volume": "NORMAL"}
     except:
         return {"sentiment": "NEUTRO", "volume": "BAIXO"}
         
