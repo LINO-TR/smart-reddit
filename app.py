@@ -72,7 +72,7 @@ if st.session_state.analise:
     # 2. Grid de Dados (Sem chaves { }!)
     col1, col2, col3 = st.columns(3)
 
-        with col1:
+    with col1:
         st.markdown('<div class="metric-card">', unsafe_allow_html=True)
         st.markdown("**🇪🇺 EURO (COT)**")
         # Tradução simples na tela
