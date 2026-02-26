@@ -2,27 +2,25 @@ import yfinance as ticker
 
 def get():
     try:
-        # Puxa dados recentes para analisar o "sentimento"
-        data = ticker.download("BTC-USD", period="1d", interval="1h")
-        if len(data) < 5:
-            return {"top": "ESTÁVEL", "risk_level": "BAIXO"}
-
-        # Calcula a variação das últimas velas
-        ultimo_fechamento = data['Close'].iloc[-1]
-        abertura_recente = data['Open'].iloc[-4] # Olha as últimas 4 horas
+        # Puxa as últimas 24 horas com velas de 1 hora
+        data = ticker.download("BTC-USD", period="2d", interval="1h")
         
-        # Lógica de Fluxo:
-        # Se o preço está subindo nas últimas horas com volume sustentado
-        if ultimo_fechamento > abertura_recente:
-            status = "SAUDÁVEL"
-            risco = "BAIXO"
-        # Se o preço está caindo (pressão vendedora dominando)
+        if len(data) < 2:
+            return {"top": "NEUTRO", "risk_level": "MÉDIO"}
+
+        # Pega o preço de agora e o preço de 4 horas atrás
+        preco_atual = data['Close'].iloc[-1]
+        preco_4h = data['Close'].iloc[-4] if len(data) >= 4 else data['Close'].iloc[0]
+        
+        # ANALISADOR DE PRESSÃO:
+        # Se o preço subiu nas últimas 4h = Pressão de Compra
+        if preco_atual > preco_4h:
+            return {"top": "SAUDÁVEL", "risk_level": "BAIXO"}
+        # Se o preço caiu nas últimas 4h = Pressão de Venda
         else:
-            status = "RISCO"
-            risco = "ALTO"
-
-        return {"top": status, "risk_level": risco}
-        
+            return {"top": "RISCO", "risk_level": "ALTO"}
+            
     except Exception:
-        return {"top": "NEUTRO", "risk_level": "MÉDIO"}
+        # Se tudo falhar, ele assume o último estado seguro
+        return {"top": "ESTÁVEL", "risk_level": "MÉDIO"}
         
