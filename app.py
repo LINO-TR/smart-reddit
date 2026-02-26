@@ -75,35 +75,39 @@ if st.session_state.analise:
     # ... (restante das colunas com as barras que você já tem)
 
     # 2. Grid de Dados (Sem chaves { }!)
-    col1, col2, col3 = st.columns(3)
+        col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.markdown('<div class="metric-card">', unsafe_allow_html=True)
         st.markdown("**🇪🇺 EURO (COT)**")
-        # Tradução simples na tela
         sig = st.session_state.dados["EUR"]["signal"].upper()
         sig_pt = "COMPRA" if "BUY" in sig else "VENDA" if "SELL" in sig else "NEUTRO"
-        st.write(f"Sinal: **{sig_pt}**")
-        st.write(f"Força: `{st.session_state.dados['EUR']['strength']}/3`")
-        st.markdown('</div>', unsafe_allow_html=True)
-
+        
+        # CÁLCULO DA BARRA: Força 0/3 vira 0.1, 1/3 vira 0.33, 3/3 vira 1.0
+        forca_cot = st.session_state.dados["EUR"]["strength"] / 3
+        st.progress(max(forca_cot, 0.05)) # Garante que apareça pelo menos um risquinho
+        
+        st.write(f"Sinal: **{sig_pt}** ({st.session_state.dados['EUR']['strength']}/3)")
 
     with col2:
-        st.markdown('<div class="metric-card" style="border-left-color: #28a745;">', unsafe_allow_html=True)
-        st.markdown("**📊 FLUXO CME (Blocks)**")
+        st.markdown("**📊 FLUXO CME**")
         blk = st.session_state.dados["BLOCK"]["block"].upper()
+        
+        # CÁLCULO DA BARRA: Se for NENHUMA fica 0.1, se tiver direção enche 1.0
+        forca_cme = 1.0 if blk != "NENHUMA" else 0.1
+        st.progress(forca_cme)
+        
         st.write(f"Ordens: **{blk}**")
-        st.write(f"Volume: `Institucional`")
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with col3:
-        st.markdown('<div class="metric-card" style="border-left-color: #ffc107;">', unsafe_allow_html=True)
-        st.markdown("**₿ BITCOIN RISK**")
-        risco = st.session_state.dados["BTC"]["top"].upper()
-        emoji = "⚠️" if risco == "RISK" else "✅"
-        st.write(f"Status: **{risco} {emoji}**")
-        st.write("Métrica: `Top Cycle`")
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown("**₿ BITCOIN**")
+        status_btc = st.session_state.dados["BTC"]["top"]
+        
+        # CÁLCULO DA BARRA: SAUDÁVEL fica em 0.3, qualquer outro (Risco) enche 1.0
+        forca_btc = 0.3 if status_btc == "SAUDÁVEL" else 1.0
+        st.progress(forca_btc)
+        
+        st.write(f"Status: **{status_btc}** {'✅' if status_btc == 'SAUDÁVEL' else '⚠️'}")
+
 
     # Botão para os nerds que ainda querem ver o JSON
     with st.expander("🔍 Ver Logs Técnicos (JSON)"):
