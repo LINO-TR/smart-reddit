@@ -75,7 +75,7 @@ if st.session_state.analise:
     # ... (restante das colunas com as barras que você já tem)
 
     # 2. Grid de Dados (Sem chaves { }!)
-        col1, col2, col3 = st.columns(3)
+    col1, col2, col3 = st.columns(3)
 
     with col1:
         st.markdown("**🇪🇺 EURO (COT)**")
