@@ -55,19 +55,24 @@ with st.sidebar:
 
 # --- VISUALIZAÇÃO PRINCIPAL ---
 if st.session_state.analise:
-    # 1. Painel de Veredito (O "Velocímetro" em texto)
+    # Separando os dois valores que vêm do scorer.py
+    veredito, estrategia = st.session_state.analise 
+    
     st.subheader("🎯 Veredito do Algoritmo")
     
-    # Define a cor do alerta
-    status = st.session_state.analise
-    if "COMPRA" in status or "Alta" in status:
-        st.success(f"### {status}")
-    elif "VENDA" in status or "Baixa" in status:
-        st.error(f"### {status}")
+    # Exibe apenas o Título do Veredito com cor
+    if "COMPRAR" in veredito or "ALTA" in veredito:
+        st.success(f"### {veredito}")
+    elif "VENDER" in veredito or "BAIXA" in veredito:
+        st.error(f"### {veredito}")
     else:
-        st.warning(f"### {status}")
+        st.warning(f"### {veredito}")
+    
+    # Exibe a Estratégia em um quadro separado e limpo
+    st.info(f"**💡 ESTRATÉGIA RECOMENDADA:**\n\n{estrategia}")
 
     st.divider()
+    # ... (restante das colunas com as barras que você já tem)
 
     # 2. Grid de Dados (Sem chaves { }!)
     col1, col2, col3 = st.columns(3)
