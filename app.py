@@ -103,7 +103,6 @@ if st.session_state.analise:
     # Botão para os nerds que ainda querem ver o JSON
     with st.expander("🔍 Ver Logs Técnicos (JSON)"):
         st.json(st.session_state.dados)
-
 else:
     st.info("Clique no botão 'Atualizar Mercado' na lateral para começar.")
     
